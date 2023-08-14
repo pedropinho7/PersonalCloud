@@ -1,4 +1,7 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const SECRET_KEY = process.env.JWT_SECRET
 
 async function login(req, res) {
     const { username, password } = req.body;
@@ -17,8 +20,14 @@ async function login(req, res) {
         }
 
         // If all OK send response. Soon do more stuff
-        res.json({ message: `Logged in as ${username}` });
+        const token = jwt.sign({username: username}, SECRET_KEY, {
+            expiresIn: '1h'
+        });
 
+        res.json({ 
+            message: `Logged in as ${username}.`,
+            token: token
+        });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while processing your request." });
     }
@@ -45,7 +54,8 @@ async function register(req, res) {
         res.json({ message: "User registered sucesffully." });
 
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.log(error);
+        res.status(500).json({ error: "An error occurred while processing your request." });    
     }
 }
 
