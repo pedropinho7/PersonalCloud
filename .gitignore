@@ -1,5 +1,7 @@
 # Ignore the .env file
 .env
+plan.txt
+db.txt
 
 # Ignore modules
 node_modules/

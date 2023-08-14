@@ -37,7 +37,13 @@ async function register(req, res) {
     const { username, password, email } = req.body;
 
     try {
-        // Check if the username exists
+        // Check if the email is valid.
+        const emailRegex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+        if (!emailRegex.test(email)) {
+            return res.status(400).json( { error: "Email is not valid."})
+        };
+
+        // Check if the user or email already exists.
         const [existingUser] = await req.db.query('SELECT * FROM users WHERE username = ?', [username]);
         const [existingEmail] = await req.db.query('SELECT * FROM users WHERE email = ?', [email]);
 
@@ -46,8 +52,7 @@ async function register(req, res) {
         } else 
         if (existingEmail) {
             return res.status(400).json({ error: "Email is already in use." });
-        }
-
+        } 
         const encryptedPassword = await bcrypt.hash(password, 10);
         const newUser = await req.db.query('INSERT INTO users (username, password, email) VALUES (?, ?, ?)', [username, encryptedPassword, email]);
         

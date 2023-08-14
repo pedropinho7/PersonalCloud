@@ -17,12 +17,13 @@ class Database {
 }
 
 const dbConfig = {
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'PPCloudUsers'
+    host: 'database-1.c7rbfya9uhqu.us-east-1.rds.amazonaws.com',
+    //host: 'localhost',
+    //host: 'host.docker.internal',
+    user: 'admin',
+    password: '0MmDpK327MuyDCcXyS0s',
+    database: 'personalcloud'
 };
 
 const db = new Database(dbConfig);
-
 module.exports = db;
